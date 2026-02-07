@@ -1,0 +1,12 @@
+# profiles.yml
+psi_engine:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      # This creates the database file inside your project folder
+      path: 'psi_supply_chain.duckdb'
+      # Optional settings for performance
+      extensions:
+        - parquet
+      threads: 4

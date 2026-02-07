@@ -1,0 +1,10 @@
+pandas
+numpy
+duckdb
+dbt-duckdb
+prophet
+scikit-learn
+matplotlib
+seaborn
+pyarrow
+openpyxl>=3.1.0

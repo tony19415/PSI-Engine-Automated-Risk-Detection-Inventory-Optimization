@@ -1,0 +1,12 @@
+semantic_models:
+  - name: inventory_health
+    model: ref('fct_supply_chain_daily')
+    measures:
+      - name: stockout_days
+        expr: case when projected_inventory_on_hand < 0 then 1 else 0 end
+        agg: sum
+    dimensions:
+      - name: product_id
+        type: categorical
+      - name: date
+        type: time
