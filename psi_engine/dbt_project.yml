@@ -32,5 +32,18 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   psi_engine:
     # Config indicated by + and applies to all files under models/example/
-    example:
+    # example:
+    #  +materialized: view
+    staging:
       +materialized: view
+    
+    intermediate:
+      +materialized: ephemeral
+
+    marts:
+      +materialized: table
+
+seeds:
+  psi_engine: # This must match your project name
+    # This forces all seeds to be built in a schema named 'raw_psi_engine' (or just 'raw')
+    +schema: raw

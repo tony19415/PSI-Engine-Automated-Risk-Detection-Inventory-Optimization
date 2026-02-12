@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: fct_supply_chain_daily
+    description: "Daily inventory positions and risk status"
+    columns:
+      - name: product_id
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_product')
+              field: product_id
+              
+      - name: inventory_health_status
+        description: "Critical risk flag"
+        data_tests:
+          - accepted_values:
+              values: ['Healthy', 'Risk', 'Stockout']
+              # If a new status like 'Unknown' appears, this test fails.

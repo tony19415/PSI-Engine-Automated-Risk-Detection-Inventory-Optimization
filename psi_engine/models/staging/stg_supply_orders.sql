@@ -16,7 +16,7 @@ cleaned as (
         cast(qty_ordered as integer) as qty_ordered,
 
         -- Standardize Status
-        initcap(status) as status,
+        upper(status) as status,
 
         cast(supplier_id as integer) as supplier_id
     

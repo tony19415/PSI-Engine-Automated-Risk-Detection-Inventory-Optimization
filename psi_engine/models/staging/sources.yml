@@ -1,18 +1,26 @@
 
 version: 2
 
-models:
+sources:
   - name: raw_supply_chain
-    schema: main
-    meta:
-      external_locations: "data/raw/{name}.csv"
+    schema: main_raw
+    # meta:
+    #   external_locations: "data/raw/{name}.csv"
     tables:
       - name: train
         description: "Historical sales demand (Kaggle data)"
+
       - name: mock_inventory_snapshot
         description: "Current on-hand inventory"
+        columns:
+          - name: item_id
+            tests:
+              - not_null
+
       - name: mock_supply_orders
         description: "Open and closed POs"        
-        data_tests:
-          - unique
-          - not_null
+        columns:
+          - name: po_id
+            data_tests:
+              - unique
+              - not_null

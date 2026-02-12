@@ -10,3 +10,5 @@ semantic_models:
         type: categorical
       - name: date
         type: time
+        type_params:
+          time_granularity: day
