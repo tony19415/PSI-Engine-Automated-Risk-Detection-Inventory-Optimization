@@ -1,25 +1,30 @@
 with daily_demand as(
     select
         product_id,
+        store_id,
         sale_date,
         sum(qty_sold) as forecasted_demand
     from {{ ref('stg_sales') }}
     where sale_date >= current_date
-    group by 1, 2
+    group by product_id, store_id, sale_date
 ),
 
 daily_supply as (
     select
         product_id,
+        store_id,
         expected_arrival_date as supply_date,
         sum(qty_ordered) as incoming_supply
     from {{ ref('stg_supply_orders') }}
     where status = 'Open'
-    group by 1, 2
+    group by product_id, store_id, supply_date
 ),
 
 current_inv as (
-    select product_id, qty_on_hand as initial_stock
+    select 
+        product_id,
+        store_id, 
+        qty_on_hand as initial_stock
     from {{ ref('stg_inventory') }}
 ),
 
@@ -39,27 +44,34 @@ current_inv as (
 -- )
 
 all_keys as (
-    select product_id, sale_date as date from daily_demand
+    select product_id, store_id, sale_date as date from daily_demand
     union distinct
-    select product_id, supply_date as date from daily_supply
+    select product_id, store_id, supply_date as date from daily_supply
     union distinct
-    select product_id, current_date as date from current_inv
+    select product_id, store_id, cast(current_date as date) as date from current_inv
 ),
 
 joined as (
     select
         k.date as sale_date,
         k.product_id,
+        k.store_id,
         coalesce(c.initial_stock, 0) as starting_inventory,
         coalesce(d.forecasted_demand, 0) as demand,
         coalesce(s.incoming_supply, 0) as supply
     from all_keys k
+
     left join daily_demand d
-        on k.product_id = d.product_id and k.date = d.sale_date
+        on k.product_id = d.product_id
+        and k.store_id = d.store_id
+        and k.date = d.sale_date
     left join daily_supply s
-        on k.product_id = s.product_id and k.date = s.supply_date
+        on k.product_id = s.product_id
+        and k.store_id = s.store_id
+        and k.date = s.supply_date
     left join current_inv c
         on k.product_id = c.product_id
+        and k.store_id = c.store_id
 )
 
 select
