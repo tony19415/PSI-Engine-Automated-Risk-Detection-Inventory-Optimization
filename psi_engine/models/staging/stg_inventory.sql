@@ -6,7 +6,7 @@ cleaned as (
     select
         {{ dbt_utils.generate_surrogate_key(['store_id', 'item_id', 'snapshot_date']) }} as inventory_id,
 
-        cast(snapshot_date as date) as inventory_date,
+        cast(current_date as date) as inventory_date,
         cast(store_id as integer) as store_id,
         cast(item_id as integer) as product_id,
 

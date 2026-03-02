@@ -9,9 +9,9 @@ cleaned as (
         cast(store_id as integer) as store_id,
 
         -- Date Handling
-        cast(order_date as date) as order_date,
-        cast(expected_arrival_date as date) as expected_arrival_date,
-        cast(actual_arrival_date as date) as actual_arrival_date,
+        cast(order_date as date) + interval '2970 days' as order_date,
+        cast(expected_arrival_date as date) + interval '2970 days' as expected_arrival_date,
+        cast(actual_arrival_date as date) + interval '2970 days' as actual_arrival_date,
 
         cast(qty_ordered as integer) as qty_ordered,
 

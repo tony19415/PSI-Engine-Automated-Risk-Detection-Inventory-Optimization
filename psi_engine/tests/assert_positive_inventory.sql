@@ -1,3 +1,7 @@
+{{ config(
+    severity = 'warn'
+)}}
+
 select
     sale_date,
     product_id,

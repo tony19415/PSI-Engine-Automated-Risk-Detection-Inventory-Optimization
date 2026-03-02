@@ -1,0 +1,18 @@
+version: 2
+
+sources:
+  - name: raw_supply_chain
+    tables:
+      - name: train
+        description: "Kaggle historical sales data"
+        # DAMA Timeliness: Ensure data isn't older than expected
+        freshness:
+          warn_after: {count: 24, period: hour}
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+          - name: sales
+            tests:
+              - accepted_values: {values: [0, 1000000], quote: false} # Validating range
